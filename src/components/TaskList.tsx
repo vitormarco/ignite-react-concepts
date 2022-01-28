@@ -15,33 +15,33 @@ export function TaskList() {
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
   function handleCreateNewTask() {
-    if (newTaskTitle.trim()) {
-      const newTask: Task = {
-        id: Math.random(),
-        title: newTaskTitle,
-        isComplete: false
-      }
-
-      setTasks(oldValue => [...oldValue, newTask])
+    if (!newTaskTitle.trim()) {
+      return 
     }
+
+    const newTask: Task = {
+      id: Math.random(),
+      title: newTaskTitle,
+      isComplete: false
+    }
+
+    setTasks(oldValue => [...oldValue, newTask])
+    setNewTaskTitle('')
   }
 
   function handleToggleTaskCompletion(id: number) {
-    const indexTask = tasks.findIndex(task => task.id === id);
+    const newTasks = tasks.map(task => task.id === id ? {
+      ...task,
+      isComplete: true
+    } : task);
 
-    const newTasks = [...tasks];
-    newTasks[indexTask].isComplete = true;
-
-    setTasks(newTasks);
+    setTasks(newTasks)
   }
 
   function handleRemoveTask(id: number) {
-    const indexTask = tasks.findIndex(task => task.id === id);
+    const filteredTasks = tasks.filter(task => task.id !== id);
 
-    const newTasks = [...tasks];
-    newTasks.splice(indexTask, 1);
-
-    setTasks(newTasks)
+    setTasks(filteredTasks)
   }
 
   return (
